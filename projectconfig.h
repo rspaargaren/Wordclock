@@ -19,6 +19,7 @@ extern volatile int UploadAudioProcessingSize;
 
 extern volatile bool AudioEnabled;
 extern volatile bool DashEnabled;
+extern volatile bool RTC_Check;
 
 //#define FrontLang 					0
 

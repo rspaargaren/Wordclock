@@ -11,7 +11,9 @@ extern void HC595ShiftOut(int Data, int Length);
 extern void HC595Latch(void);
 extern void HC595Output(bool State);
 
+extern void init_ClockTimer(void);
 extern void init_ScreenRefresh(void);
+
 
 extern void GetTime(int *Hr, int *Min, int *Sec);
 extern void SetTime(int H, int I, int S);

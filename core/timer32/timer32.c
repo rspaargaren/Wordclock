@@ -21,10 +21,12 @@
 ****************************************************************************/
 #include "LPC13xx.h"
 #include "timer32.h"
+#include "Peripherals.h"
 #include "lpc_types.h"
 #include "type.h"
-
+#include "projectconfig.h"
 #include "CapacitiveTouch.h"
+//volatile bool RTC_Check=FALSE;
 
 
 /******************************************************************************
@@ -39,10 +41,9 @@
 ******************************************************************************/
 void TIMER32_0_IRQHandler(void)
 {
-//	static int UpdateTime_Timer = 0;
-
-	if ( LPC_TMR32B0->IR & 0x01 ){
-		LPC_TMR32B0->IR = 1;				/* clear interrupt flag */
+	if ( LPC_TMR32B0->IR & 1<<1 ){
+		RTC_Check=TRUE;
+		LPC_TMR32B0->IR = 1<<1;				/* clear interrupt flag */
 	}
 
 	if ( LPC_TMR32B0->IR & (0x1<<4) )

@@ -64,6 +64,7 @@ int main (void) {
 	DS1337_Init();
 	HC595Init();
 	TLC5925Init();
+	init_ClockTimer();
 	init_ScreenRefresh();
 	SSPInit();
 

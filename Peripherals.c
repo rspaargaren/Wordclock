@@ -12,6 +12,7 @@ volatile unsigned int DisplayIntensityMin=1, DisplayIntensityMax=100;
 volatile unsigned int FrontLang=0;
 volatile unsigned int AmPm=0;
 volatile bool DashEnabled=TRUE;
+volatile bool RTC_Check=FALSE;
 
 void init_Bluetooth(void){
 	//Set Name
@@ -26,8 +27,10 @@ void GetTime(int *Hr, int *Min, int *Sec){
 	static int LastHr, LastMin, LastSec;
 
 	//if pin low -> one second interrupt of RTC happened
-	if(!(LPC_GPIO0->DATA & 1<<7)){
-
+//	if(!(LPC_GPIO0->DATA & 1<<7)){
+	if(RTC_Check){
+		//CommSendString("READ TIME\r\n");
+		RTC_Check=FALSE;
 		unsigned char byte[4];
 
 		//reset seconds interrupt flag
@@ -113,6 +116,21 @@ void GetIntensity(void){
 	}
 }
 
+void init_ClockTimer(void){
+	  //Enable system clock to timer clock
+	  LPC_SYSCON->SYSAHBCLKCTRL |= (1<<9);
+
+	  LPC_TMR32B0->PR = 72000; //MHZ_PRESCALE;
+	  LPC_TMR32B0->MR1 = 1000; //Screen refresh rate
+
+	  LPC_TMR32B0->MCR = (1<<3) | (1<<4);				/* Interrupt and Reset on MR1 */
+
+	  /* Enable the TIMER0 Interrupt */
+	  NVIC_EnableIRQ(TIMER_32_0_IRQn);
+
+	  //Enable the timer
+	  LPC_TMR32B0->TCR = 1;
+}
 
 
 void init_ScreenRefresh(void){
